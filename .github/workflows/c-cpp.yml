@@ -8,11 +8,11 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
+    
     - name: Download build-env image
       id: download-sha
       uses: actions/download-artifact@v4
@@ -35,10 +35,10 @@ jobs:
         elif [ -f image-latest.tar ]; then
           docker load -i image-latest.tar
         else
-          echo "No Docker image artifact found (searched for image.tar and image-latest.tar)" >&2
+          echo "No Docker image artifact found. Please run the 'Build Docker Environment' workflow first." >&2
           exit 1
         fi
 
     - name: Build inside Docker
       run: |
-        docker run --rm -v "${{ github.workspace }}:/workspace" -w /workspace mandelbrot-build-env:latest bash -lc "make"
+        docker run --rm -v "${{ github.workspace }}:/workspace" -w /workspace mandelbrot-build-env:latest make
