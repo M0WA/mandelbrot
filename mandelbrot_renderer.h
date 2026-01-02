@@ -43,6 +43,8 @@ private:
     int calculateIterationsForZoom(double zoomLevel);
     void calculateFrame();
     void renderFrame();
+    void screenToComplex(double xpos, double ypos, double& realPos, double& imagPos);
+    void clampIterations();
     
     static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
     static void framebufferSizeCallback(GLFWwindow* window, int width, int height);

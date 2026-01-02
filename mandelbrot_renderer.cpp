@@ -40,6 +40,22 @@ int MandelbrotGLRenderer::calculateIterationsForZoom(double zoomLevel) {
     return iterations;
 }
 
+void MandelbrotGLRenderer::screenToComplex(double xpos, double ypos, double& realPos, double& imagPos) {
+    double aspect = static_cast<double>(width) / height;
+    double rangeY = 2.0 / zoom;
+    double rangeX = rangeY * aspect;
+    
+    // Flip Y coordinate: GLFW has Y=0 at top, but we want Y increasing upward
+    double flippedY = height - ypos;
+    realPos = centerX + (xpos - width / 2.0) * rangeX / width;
+    imagPos = centerY + (flippedY - height / 2.0) * rangeY / height;
+}
+
+void MandelbrotGLRenderer::clampIterations() {
+    if (maxIterations < 5) maxIterations = 5;
+    if (maxIterations > 10000) maxIterations = 10000;
+}
+
 void MandelbrotGLRenderer::calculateFrame() {
     isCalculating = true;
     
@@ -206,20 +222,20 @@ void MandelbrotGLRenderer::handleKey(int key) {
         case GLFW_KEY_EQUAL:
         case GLFW_KEY_KP_ADD:
             maxIterations += 5;
-            if (maxIterations > 10000) maxIterations = 10000;
+            clampIterations();
             break;
         case GLFW_KEY_MINUS:
         case GLFW_KEY_KP_SUBTRACT:
             maxIterations -= 5;
-            if (maxIterations < 5) maxIterations = 5;
+            clampIterations();
             break;
         case GLFW_KEY_COMMA:
             maxIterations += 1000;
-            if (maxIterations > 10000) maxIterations = 10000;
+            clampIterations();
             break;
         case GLFW_KEY_PERIOD:
             maxIterations -= 1000;
-            if (maxIterations < 5) maxIterations = 5;
+            clampIterations();
             break;
         case GLFW_KEY_V:
             isJuliaMode = !isJuliaMode;
@@ -273,19 +289,13 @@ void MandelbrotGLRenderer::handleScroll(double yoffset) {
     
     if (localWidth <= 0 || localHeight <= 0) return;
     
-    // Calculate aspect ratio
-    double aspect = static_cast<double>(localWidth) / localHeight;
-    
     // Calculate complex coordinates at cursor position before zoom
-    double rangeY = 2.0 / localZoom;
-    double rangeX = rangeY * aspect;
+    double cursorReal, cursorImag;
+    screenToComplex(mouseX, mouseY, cursorReal, cursorImag);
     
-    // Flip Y coordinate: GLFW has (0,0) at top-left, but our calculation has Y increasing downward
-    // and OpenGL texture coordinates are flipped
+    // Calculate aspect ratio for recentering after zoom
+    double aspect = static_cast<double>(localWidth) / localHeight;
     double flippedMouseY = localHeight - mouseY;
-    
-    double cursorReal = centerX + (mouseX - localWidth / 2.0) * rangeX / localWidth;
-    double cursorImag = centerY + (flippedMouseY - localHeight / 2.0) * rangeY / localHeight;
     
     // Apply zoom
     if (yoffset > 0) {
@@ -329,15 +339,7 @@ void MandelbrotGLRenderer::handleMouseButton(int button, int action) {
 
 void MandelbrotGLRenderer::handleCursorPos(double xpos, double ypos) {
     // Update cursor position in complex plane
-    double aspect = static_cast<double>(width) / height;
-    double rangeY = 2.0 / zoom;
-    double rangeX = rangeY * aspect;
-    
-    // Convert mouse position to complex plane coordinates
-    // Flip Y coordinate: GLFW has Y=0 at top, but we want Y increasing upward
-    double flippedY = height - ypos;
-    cursorRealPos = centerX + (xpos - width / 2.0) * rangeX / width;
-    cursorImagPos = centerY + (flippedY - height / 2.0) * rangeY / height;
+    screenToComplex(xpos, ypos, cursorRealPos, cursorImagPos);
     cursorInWindow = true;
     
     if (isDragging) {
@@ -345,6 +347,9 @@ void MandelbrotGLRenderer::handleCursorPos(double xpos, double ypos) {
         double deltaY = ypos - lastMouseY;
         
         // Convert pixel movement to complex plane movement
+        double aspect = static_cast<double>(width) / height;
+        double rangeY = 2.0 / zoom;
+        double rangeX = rangeY * aspect;
         centerX -= deltaX * rangeX / width;
         centerY += deltaY * rangeY / height;  // Invert Y for natural mouse drag
         
@@ -404,8 +409,6 @@ void MandelbrotGLRenderer::handleGotoCoordinate() {
     if (!input.empty()) {
         try {
             newIterations = std::stoi(input);
-            if (newIterations < 5) newIterations = 5;
-            if (newIterations > 10000) newIterations = 10000;
         } catch (...) {
             std::cout << "Invalid input, keeping current value.\n";
         }
@@ -416,6 +419,7 @@ void MandelbrotGLRenderer::handleGotoCoordinate() {
     centerY = newCenterY;
     zoom = newZoom;
     maxIterations = newIterations;
+    clampIterations();
     
     std::cout << "\nJumping to: (" << centerX << ", " << centerY << ") ";
     std::cout << "at zoom " << zoom << "x with " << maxIterations << " iterations\n\n";
