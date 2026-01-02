@@ -32,10 +32,38 @@ An interactive C++ OpenGL application that renders the Mandelbrot and Julia sets
 
 ## Building
 
+### From Source
+
 Requires GLFW, OpenGL, and FreeType libraries:
 ```bash
 sudo apt-get install libglfw3-dev libgl1-mesa-dev libfreetype-dev  # On Ubuntu/Debian
 make
+```
+
+### Debian Package
+
+Build a Debian package:
+```bash
+make deb
+```
+
+This creates `mandelbrot-renderer_1.0.0_amd64.deb` in the parent directory.
+
+Install the package:
+```bash
+sudo dpkg -i ../mandelbrot-renderer_1.0.0_amd64.deb
+```
+
+## Installation
+
+### From Source
+```bash
+sudo make install
+```
+
+### From Debian Package
+```bash
+sudo dpkg -i mandelbrot-renderer_1.0.0_amd64.deb
 ```
 
 ## Running
@@ -44,9 +72,21 @@ make
 ./mandelbrot
 ```
 
+Or if installed:
+```bash
+mandelbrot
+```
+
 Or:
 ```bash
 make run
+```
+
+## Documentation
+
+View the manual page:
+```bash
+man mandelbrot
 ```
 
 ## How It Works
@@ -63,6 +103,8 @@ The application calculates the Mandelbrot or Julia set for each pixel position u
 - **mandelbrot_renderer.cpp/h** - Main renderer with dual windows and input handling
 - **mandelbrot_calculator.cpp/h** - Core Mandelbrot and Julia set calculation and color mapping
 - **info_window.cpp/h** - Info window with FreeType text rendering
+- **man/mandelbrot.1** - Man page documentation
+- **debian/** - Debian packaging files
 - **build/** - Compiled object files (automatically created)
 
 ## Requirements
@@ -72,3 +114,15 @@ The application calculates the Mandelbrot or Julia set for each pixel position u
 - GLFW3 library
 - OpenGL library
 - FreeType library
+
+## Uninstallation
+
+### From Source Installation
+```bash
+sudo make uninstall
+```
+
+### From Debian Package
+```bash
+sudo dpkg -r mandelbrot-renderer
+```
