@@ -11,6 +11,8 @@ RUN apt-get update \
         libgl1-mesa-dev \
         libfreetype-dev \
         ca-certificates \
+        debhelper-compat \
+        pkg-config \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /workspace
