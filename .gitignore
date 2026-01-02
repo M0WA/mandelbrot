@@ -1,5 +1,18 @@
 .vscode
 build/
 *.o
-mandelbrotimage-*.tar
+image-*.tar
 mandelbrot
+
+# Debian packaging
+debian/.debhelper/
+debian/mandelbrot-renderer/
+debian/mandelbrot-renderer-dbgsym/
+debian/files
+debian/*.substvars
+debian/*.log
+debian/tmp/
+*.deb
+*.ddeb
+*.buildinfo
+*.changes

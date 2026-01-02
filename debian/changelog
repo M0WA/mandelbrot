@@ -1,0 +1,9 @@
+mandelbrot-renderer (1.0.0) unstable; urgency=medium
+
+  * Initial release
+  * Mandelbrot and Julia set rendering
+  * Interactive navigation and zooming
+  * Multithreaded calculation
+  * Info window with FreeType text rendering
+
+ -- Developer <dev@example.com>  Thu, 02 Jan 2026 00:00:00 +0000

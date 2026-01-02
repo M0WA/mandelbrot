@@ -1,0 +1,28 @@
+Source: mandelbrot-renderer
+Section: graphics
+Priority: optional
+Maintainer: Developer <dev@example.com>
+Build-Depends: debhelper-compat (= 13),
+               libglfw3-dev,
+               libgl1-mesa-dev,
+               libfreetype-dev,
+               pkg-config,
+               g++,
+               make
+Standards-Version: 4.6.0
+Homepage: https://github.com/yourusername/mandelbrot
+
+Package: mandelbrot-renderer
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Interactive Mandelbrot and Julia set renderer
+ An interactive C++ OpenGL application that renders the Mandelbrot
+ and Julia sets with real-time navigation and zooming.
+ .
+ Features include:
+  - Real-time Mandelbrot and Julia set rendering
+  - Separate info window with cursor position and zoom level
+  - Cursor-centered zoom and pan controls
+  - Multithreaded calculation for optimal performance
+  - Toggle between Mandelbrot and Julia sets
+  - FreeType text rendering

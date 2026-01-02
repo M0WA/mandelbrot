@@ -1,0 +1,67 @@
+.TH MANDELBROT 1 "January 2026" "mandelbrot-renderer 1.0.0" "User Commands"
+.SH NAME
+mandelbrot \- interactive Mandelbrot and Julia set renderer
+.SH SYNOPSIS
+.B mandelbrot
+.SH DESCRIPTION
+.B mandelbrot
+is an interactive C++ OpenGL application that renders the Mandelbrot and Julia sets with real-time navigation and zooming. It features a separate info window displaying cursor position, zoom level, and iterations, with text rendered using FreeType.
+.PP
+The application uses multithreaded calculation for optimal performance and provides smooth RGB color gradients for visualization.
+.SH CONTROLS
+.TP
+.B Arrow Keys, W/A/S/D
+Move the viewport in the complex plane
+.TP
+.B Mouse Wheel
+Zoom in/out (centers on cursor position)
+.TP
+.B Left Mouse Button + Drag
+Pan the viewport
+.TP
+.B Right Mouse Button
+Open console dialog to jump to specific coordinates
+.TP
+.B +, =
+Increase iterations by 5
+.TP
+.B -, _
+Decrease iterations by 5
+.TP
+.B , (comma)
+Increase iterations by 1000
+.TP
+.B . (period)
+Decrease iterations by 1000
+.TP
+.B V
+Toggle between Mandelbrot and Julia set mode. When switching to Julia mode, the current cursor position is used as the Julia constant.
+.TP
+.B 0
+Reset to initial view
+.TP
+.B Q, ESC
+Quit the application
+.SH FEATURES
+.IP \(bu 2
+Real-time Mandelbrot and Julia set rendering
+.IP \(bu
+Cursor-centered zoom with automatic iteration scaling
+.IP \(bu
+Multithreaded pixel calculation
+.IP \(bu
+Info window with real-time cursor position and zoom information
+.IP \(bu
+FreeType text rendering
+.IP \(bu
+FPS counter for performance monitoring
+.SH TECHNICAL DETAILS
+The application automatically adjusts iteration count logarithmically as you zoom deeper, providing appropriate detail at each zoom level while maintaining performance. The default iteration count is 100, with automatic scaling based on zoom level.
+.PP
+Color mapping uses a 6-color gradient: blue → cyan → green → yellow → red → magenta.
+.SH AUTHOR
+Written by Developer.
+.SH REPORTING BUGS
+Report bugs at: <https://github.com/yourusername/mandelbrot/issues>
+.SH SEE ALSO
+Full documentation available at: <https://github.com/yourusername/mandelbrot>

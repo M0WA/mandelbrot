@@ -6,6 +6,10 @@ SRC = main.cpp mandelbrot_renderer.cpp mandelbrot_calculator.cpp info_window.cpp
 OBJ = $(BUILD_DIR)/main.o $(BUILD_DIR)/mandelbrot_renderer.o $(BUILD_DIR)/mandelbrot_calculator.o $(BUILD_DIR)/info_window.o
 LIBS = -lglfw -lGL -lpthread -lfreetype
 
+PREFIX ?= /usr/local
+BINDIR = $(PREFIX)/bin
+MANDIR = $(PREFIX)/share/man/man1
+
 all: $(TARGET)
 
 $(TARGET): $(OBJ)
@@ -27,10 +31,27 @@ $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
 clean:
+	$(MAKE) deb-clean
 	rm -f $(TARGET)
 	rm -rf $(BUILD_DIR)
 
+install: $(TARGET)
+	install -D -m 0755 $(TARGET) $(DESTDIR)$(BINDIR)/$(TARGET)
+	install -D -m 0644 man/mandelbrot.1 $(DESTDIR)$(MANDIR)/mandelbrot.1
+
+uninstall:
+	rm -f $(DESTDIR)$(BINDIR)/$(TARGET)
+	rm -f $(DESTDIR)$(MANDIR)/mandelbrot.1
+
 run: $(TARGET)
 	./$(TARGET)
+
+deb: clean
+	dpkg-buildpackage -us -uc -b
+
+deb-clean:
+	-fakeroot debian/rules clean
+
+.PHONY: all clean install uninstall run deb deb-clean
 
 .PHONY: all clean run
