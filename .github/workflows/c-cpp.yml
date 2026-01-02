@@ -23,3 +23,7 @@ jobs:
     - name: Build inside Docker
       run: |
         docker run --rm -v "${{ github.workspace }}:/workspace" -w /workspace mandelbrot-build-env:latest make
+
+    - name: Build debian package inside Docker
+      run: |
+        docker run --rm -v "${{ github.workspace }}:/workspace" -w /workspace mandelbrot-build-env:latest make deb
