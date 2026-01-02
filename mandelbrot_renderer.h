@@ -8,7 +8,7 @@
 class InfoWindow;
 
 class MandelbrotGLRenderer {
-private:
+protected:
     GLFWwindow* window;
     InfoWindow* infoWindow;
     int width, height;

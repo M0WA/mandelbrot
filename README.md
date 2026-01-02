@@ -82,6 +82,22 @@ Or:
 make run
 ```
 
+## Testing
+
+Run the test suite:
+```bash
+make test
+```
+
+The project includes comprehensive unit tests for:
+- Mandelbrot set calculations
+- Julia set calculations
+- RGB color mapping
+- Iteration clamping
+- Zoom level calculations
+- Screen-to-complex coordinate transformations
+- Coordinate system consistency
+
 ## Documentation
 
 View the manual page:
@@ -103,6 +119,10 @@ The application calculates the Mandelbrot or Julia set for each pixel position u
 - **mandelbrot_renderer.cpp/h** - Main renderer with dual windows and input handling
 - **mandelbrot_calculator.cpp/h** - Core Mandelbrot and Julia set calculation and color mapping
 - **info_window.cpp/h** - Info window with FreeType text rendering
+- **tests/** - Test suite using custom Catch2-style framework
+  - **test_mandelbrot_calculator.cpp** - Tests for calculation functions
+  - **test_mandelbrot_renderer.cpp** - Tests for renderer helper methods
+  - **catch.hpp** - Lightweight testing framework
 - **man/mandelbrot.1** - Man page documentation
 - **debian/** - Debian packaging files
 - **build/** - Compiled object files (automatically created)
