@@ -13,31 +13,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Download build-env image
-      id: download-sha
-      uses: actions/download-artifact@v4
-      with:
-        name: build-env-image-${{ github.sha }}
-        path: .
-      continue-on-error: true
-
-    - name: Download latest image artifact (fallback)
-      if: steps.download-sha.outcome != 'success'
-      uses: actions/download-artifact@v4
-      with:
-        name: build-env-image-latest
-        path: .
-
-    - name: Load Docker image
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: Build Docker image
       run: |
-        if [ -f image.tar ]; then
-          docker load -i image.tar
-        elif [ -f image-latest.tar ]; then
-          docker load -i image-latest.tar
-        else
-          echo "No Docker image artifact found. Please run the 'Build Docker Environment' workflow first." >&2
-          exit 1
-        fi
+        docker build -f .github/docker/Dockerfile -t mandelbrot-build-env:latest .
 
     - name: Build inside Docker
       run: |
