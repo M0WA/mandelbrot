@@ -1,0 +1,35 @@
+
+name: Build Docker Environment
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+          IMAGE_TAG=mandelbrot-build-env-${{ github.sha }}
+          docker build -f .github/docker/Dockerfile -t "$IMAGE_TAG" .
+          docker tag "$IMAGE_TAG" mandelbrot-build-env:latest
+          docker save "$IMAGE_TAG" -o image.tar
+          docker save mandelbrot-build-env:latest -o image-latest.tar
+
+      - name: Upload image artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-env-image-${{ github.sha }}
+          path: image.tar
+
+      - name: Upload latest image artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-env-image-latest
+          path: image-latest.tar
+
